@@ -76,6 +76,7 @@ GBA009
 - **Header:** Blue background, white "BVS3 CARPARK ENTRY" text
 - **Plate Number:** Large cyan text, stays until the next detection
 - **Status LED:** Green dot = MQTT connected, light grey dot = disconnected
+- **Detection Time:** bottom-left, stamped when a plate is received (DD/MM HH:MM:SS, HK time via SNTP)
 
 ## Building
 

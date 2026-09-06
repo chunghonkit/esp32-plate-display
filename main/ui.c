@@ -4,10 +4,12 @@
 #include "ui.h"
 #include "lvgl.h"
 #include "esp_log.h"
+#include <time.h>
 
 static const char *TAG = "ui";
 static lv_obj_t *plate_label = NULL;
 static lv_obj_t *status_dot = NULL;
+static lv_obj_t *time_label = NULL;
 static lv_obj_t *info_label = NULL;
 
 void ui_init(void) {
@@ -61,6 +63,13 @@ void ui_init(void) {
     lv_obj_set_style_bg_color(status_dot, lv_color_make(211, 211, 211), 0);
     lv_obj_align(status_dot, LV_ALIGN_BOTTOM_RIGHT, -12, -6);
 
+    // Detection timestamp — bottom left of the status bar
+    time_label = lv_label_create(status_bar);
+    lv_obj_set_style_text_font(time_label, &lv_font_montserrat_14, 0);
+    lv_label_set_text(time_label, "");
+    lv_obj_set_style_text_color(time_label, lv_color_make(200, 200, 200), 0);
+    lv_obj_align(time_label, LV_ALIGN_LEFT_MID, 8, 0);
+
     ESP_LOGI(TAG, "UI initialized");
 }
 
@@ -68,6 +77,17 @@ void ui_init(void) {
 void ui_set_plate(const char *plate) {
     lv_label_set_text(plate_label, plate);
     ESP_LOGI(TAG, "Plate: %s", plate);
+
+    // Stamp the detection time (bottom-left) once the RTC has real time (post-SNTP)
+    time_t now = time(NULL);
+    if (now > 1609459200) {  // 2021-01-01 — skip while clock is unsynced
+        struct tm tmv;
+        localtime_r(&now, &tmv);
+        char buf[24];
+        strftime(buf, sizeof(buf), "%d/%m %H:%M:%S", &tmv);
+        lv_label_set_text(time_label, buf);
+        ESP_LOGI(TAG, "Detection time: %s", buf);
+    }
 }
 
 void ui_set_status(bool connected) {

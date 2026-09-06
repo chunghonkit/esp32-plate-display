@@ -13,6 +13,8 @@
 #include "esp_http_server.h"
 #include "esp_log.h"
 #include "esp_task_wdt.h"
+#include "esp_netif_sntp.h"
+#include <stdlib.h>
 #include <netdb.h>
 
 #include "xl9555.h"
@@ -257,6 +259,14 @@ void app_main(void) {
         // === WiFi connected — plate display mode ===
         ESP_LOGI(TAG, "WiFi connected, starting MQTT");
         ui_set_status(true);
+
+        // SNTP sync for plate detection timestamps (HK time, UTC+8, no DST)
+        setenv("TZ", "HKT-8", 1);
+        tzset();
+        esp_sntp_config_t sntp_cfg = ESP_NETIF_SNTP_DEFAULT_CONFIG("pool.ntp.org");
+        sntp_cfg.wait_for_sync = false;
+        esp_netif_sntp_init(&sntp_cfg);
+
         mqtt_handler_init(wifi_ssid, wifi_pass, plate_cb);
     } else {
         // === WiFi failed — start AP captive portal ===
