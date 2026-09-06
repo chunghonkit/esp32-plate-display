@@ -43,7 +43,7 @@ void ui_init(void) {
 
     lv_obj_t *header_label = lv_label_create(header);
     lv_obj_set_style_text_font(header_label, &lv_font_montserrat_18, 0);
-    lv_label_set_text(header_label, "CARPARK ENTRY");
+    lv_label_set_text(header_label, "BVS3 CARPARK ENTRY");
     lv_obj_set_style_text_color(header_label, lv_color_white(), 0);
     lv_obj_center(header_label);
 
