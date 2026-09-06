@@ -10,6 +10,23 @@ static lv_obj_t *plate_label = NULL;
 static lv_obj_t *status_label = NULL;
 static lv_obj_t *info_label = NULL;
 
+#define PLATE_HOLD_MS       20000
+#define PLATE_HOLD_CHECK_MS 200
+
+static uint32_t    plate_shown_since = 0;
+static bool        plate_auto_clear  = false;
+static lv_timer_t *hold_timer        = NULL;
+
+// Clears the plate label back to "---" once it has been shown for PLATE_HOLD_MS.
+static void plate_hold_cb(lv_timer_t *timer) {
+    if (!plate_auto_clear) return;
+    if (lv_tick_get() - plate_shown_since >= PLATE_HOLD_MS) {
+        plate_auto_clear = false;
+        lv_label_set_text(plate_label, "---");
+        ESP_LOGI(TAG, "Plate hold expired, cleared");
+    }
+}
+
 void ui_init(void) {
     lv_obj_t *scr = lv_scr_act();
     lv_obj_set_style_bg_color(scr, lv_color_black(), 0);
@@ -60,11 +77,23 @@ void ui_init(void) {
     lv_obj_center(status_label);
 
     ESP_LOGI(TAG, "UI initialized");
+
+    // Periodic check that clears the plate after its 20 s hold window.
+    hold_timer = lv_timer_create(plate_hold_cb, PLATE_HOLD_CHECK_MS, NULL);
 }
 
+// Detected plate from MQTT — shows for 20 s, auto-clears, refreshed by new detections.
 void ui_set_plate(const char *plate) {
     lv_label_set_text(plate_label, plate);
-    ESP_LOGI(TAG, "Plate: %s", plate);
+    plate_shown_since = lv_tick_get();
+    plate_auto_clear  = true;
+    ESP_LOGI(TAG, "Plate: %s (hold 20s)", plate);
+}
+
+// Persistent message in the plate area (e.g. "Setup WiFi") — no auto-clear.
+void ui_set_message(const char *text) {
+    lv_label_set_text(plate_label, text);
+    plate_auto_clear = false;
 }
 
 void ui_set_status(bool connected) {

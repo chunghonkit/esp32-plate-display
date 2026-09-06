@@ -261,7 +261,7 @@ void app_main(void) {
     } else {
         // === WiFi failed — start AP captive portal ===
         ESP_LOGW(TAG, "WiFi connect failed — starting captive portal");
-        ui_set_plate("Setup WiFi");
+        ui_set_message("Setup WiFi");
         ui_set_info("Connect to: PlateDisplay");
         start_ap();
     }
