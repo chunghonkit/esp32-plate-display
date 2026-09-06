@@ -76,7 +76,7 @@ void ui_init(void) {
     lv_obj_set_style_radius(status_dot, LV_RADIUS_CIRCLE, 0);
     lv_obj_set_style_border_width(status_dot, 0, 0);
     lv_obj_set_style_bg_color(status_dot, lv_color_make(211, 211, 211), 0);
-    lv_obj_center(status_dot);
+    lv_obj_align(status_dot, LV_ALIGN_BOTTOM_RIGHT, -12, -6);
 
     ESP_LOGI(TAG, "UI initialized");
 
