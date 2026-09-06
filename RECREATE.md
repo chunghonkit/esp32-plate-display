@@ -18,9 +18,9 @@
 | XL9555 SCL | 1 | XL9555 SDA | 2 |
 
 ## Behaviour
-1. Boot → LCD initialises immediately and shows the UI in **both** AP and STA paths.
+1. Boot → LCD initialises immediately and shows the UI (blue header "BVS3 CARPARK ENTRY", big cyan plate text) in **both** AP and STA paths.
 2. WiFi priority: NVS-saved credentials → hardcoded defaults → fallback AP "PlateDisplay" (captive portal at http://192.168.4.1, HTTP GET form, saves to NVS with read-back verify, then reboots).
-3. Once on WiFi → connect MQTT → subscribe to topic → render incoming plate text (hold ~20 s), status bar green = connected / red = disconnected.
+3. Once on WiFi → connect MQTT → subscribe to topic → render incoming plate text — holds ~20 s then clears to `---`; a new plate refreshes the window. Status bar green = connected / red = disconnected.
 
 ## Software stack
 - ESP-IDF v5.4 (target `esp32s3`), CMake + Ninja

@@ -63,7 +63,7 @@ GBA009
 
 ```
 ┌────────────────────────────────────┐
-│         CARPARK ENTRY              │  ← Header (Montserrat 18)
+│         BVS3 CARPARK ENTRY         │  ← Header (Montserrat 18)
 ├────────────────────────────────────┤
 │                                    │
 │           GBA009                   │  ← Plate Number (Montserrat 48)
@@ -73,7 +73,7 @@ GBA009
 └────────────────────────────────────┘
 ```
 
-- **Header:** Blue background, white text
+- **Header:** Blue background, white "BVS3 CARPARK ENTRY" text
 - **Plate Number:** Large cyan text, holds for 20 seconds
 - **Status Bar:** Green = MQTT connected, Red = disconnected
 
