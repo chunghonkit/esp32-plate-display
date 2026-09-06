@@ -56,7 +56,6 @@ GBA009
 ```
 
 ### Broker
-- Host: `mqtt.citybaseiot.duckdns.org`
 - Port: 1883
 - User: `mqtt`
 
