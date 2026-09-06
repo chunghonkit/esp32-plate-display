@@ -68,14 +68,14 @@ GBA009
 │                                    │
 │           GBA009                   │  ← Plate Number (Montserrat 48)
 │                                    │
-│      MQTT Connected                │  ← Status Bar
+│              ●                 │  ← Status LED (green/grey)
 ├────────────────────────────────────┤
 └────────────────────────────────────┘
 ```
 
 - **Header:** Blue background, white "BVS3 CARPARK ENTRY" text
 - **Plate Number:** Large cyan text, holds for 20 seconds
-- **Status Bar:** Green = MQTT connected, Red = disconnected
+- **Status LED:** Green dot = MQTT connected, light grey dot = disconnected
 
 ## Building
 

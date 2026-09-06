@@ -7,7 +7,7 @@
 
 static const char *TAG = "ui";
 static lv_obj_t *plate_label = NULL;
-static lv_obj_t *status_label = NULL;
+static lv_obj_t *status_dot = NULL;
 static lv_obj_t *info_label = NULL;
 
 #define PLATE_HOLD_MS       20000
@@ -70,11 +70,13 @@ void ui_init(void) {
     lv_obj_set_style_pad_all(status_bar, 0, 0);
     lv_obj_clear_flag(status_bar, LV_OBJ_FLAG_SCROLLABLE);
 
-    status_label = lv_label_create(status_bar);
-    lv_obj_set_style_text_font(status_label, &lv_font_montserrat_18, 0);
-    lv_label_set_text(status_label, "Initializing...");
-    lv_obj_set_style_text_color(status_label, lv_color_make(248, 128, 0), 0);
-    lv_obj_center(status_label);
+    // Status LED dot — green = MQTT connected, light grey = disconnected
+    status_dot = lv_obj_create(status_bar);
+    lv_obj_set_size(status_dot, 16, 16);
+    lv_obj_set_style_radius(status_dot, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_border_width(status_dot, 0, 0);
+    lv_obj_set_style_bg_color(status_dot, lv_color_make(211, 211, 211), 0);
+    lv_obj_center(status_dot);
 
     ESP_LOGI(TAG, "UI initialized");
 
@@ -98,11 +100,9 @@ void ui_set_message(const char *text) {
 
 void ui_set_status(bool connected) {
     if (connected) {
-        lv_label_set_text(status_label, "MQTT Connected");
-        lv_obj_set_style_text_color(status_label, lv_color_make(0, 224, 0), 0);
+        lv_obj_set_style_bg_color(status_dot, lv_color_make(0, 224, 0), 0);    // green
     } else {
-        lv_label_set_text(status_label, "MQTT Disconnected");
-        lv_obj_set_style_text_color(status_label, lv_color_make(248, 0, 0), 0);
+        lv_obj_set_style_bg_color(status_dot, lv_color_make(211, 211, 211), 0); // light grey
     }
 }
 
